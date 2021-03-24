@@ -30,7 +30,7 @@ int main()
 
 	float mean_interarrival_time = 0.0; //initialize input
     	float mean_service_time = 0.0;
-	
+//nothing
 	printf("Enter mean_interarrival_time\n");
 	scanf("%f", &mean_interarrival_time);
 	printf("Enter mean_service_time\n");
