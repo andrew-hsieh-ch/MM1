@@ -82,35 +82,39 @@ int main()
     
 }
 
-void arrive(void) // change to call by reference
+void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,int* Q_limit,
+float* sim_time,float* area_under_Q,float* last_event_time,float* time_since_last_event,
+float* time_arrival[Q_limit],float* mean_interarrival_time,float* mean_service_time,
+float* next_arr_time,float *next_dept_time) // change to call by reference
+
 {	
-	sim_time = next_arr_time;
-	next_arr_time = sim_time + expon(mean_interarrival_time);
+	*sim_time = *next_arr_time;
+	*next_arr_time = *sim_time + expon(*mean_interarrival_time);
 
 	
-	time_since_last_event = sim_time - last_event_time;
-	last_event_time = sim_time;
-	area_under_Q += num_in_queue * time_since_last_event;
+	*time_since_last_event = *sim_time - *last_event_time;
+	*last_event_time = *sim_time;
+	*area_under_Q += *num_in_queue * *time_since_last_event;
 	
 	
-	if(server_status == BUSY)
+	if(*server_status == BUSY)
 	{
-		++ num_in_queue;
-		if(num_in_queue > Q_limit)
+		++ *num_in_queue;
+		if(*num_in_queue > Q_limit)
 		{
 			printf("\nOverflow of the array time_arrival at");
-			printf(" time %f",sim_time);
+			printf(" time %f",*sim_time);
 			exit(2); // double check
 		}
-		time_arrival[num_in_queue] = sim_time;
+		*time_arrival[*num_in_queue] = *sim_time;
 	}
 	else
 	{
 		
-		++num_custs_delayed;
-		server_status = BUSY;	
+		++*num_custs_delayed;
+		*server_status = BUSY;	
 		
-		next_dept_time = sim_time + expon(mean_service_time);
+		*next_dept_time = *sim_time + expon(*mean_service_time);
 	}
 }
 
