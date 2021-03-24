@@ -56,7 +56,8 @@ int main()
 
         if(next_arr_time<next_dept_time){
             //printf("I'm in arrival");
-            arrive();
+            arrive(&server_status,&num_in_queue,&num_custs_delayed, &Q_limit,sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
+			&time_arrival[Q_limit],&mean_interarrival_time,&mean_service_time,&next_arr_time,&next_dept_time);
         }
         else{
             //printf("I'm in departure");
