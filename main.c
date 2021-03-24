@@ -39,7 +39,7 @@ int main()
 
 
     
-
+// testing
     
     for (int i=0;i<Q_limit;i++){ // initialize time_arrival
         time_arrival[i]=0.0;
