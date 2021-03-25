@@ -16,7 +16,7 @@ float f(float mean, float x){
 int main()
 {
     int server_status=IDLE;     // initialize
-    int num_in_queueueue=0;
+    int num_in_queue=0;
     int num_custs_delayed=0;
     int num_delays_required=10000;
     float sim_time=0.0;
