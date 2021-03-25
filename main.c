@@ -13,8 +13,8 @@
 float expon(float);
 void depart(void);
 =======
-float f(float mean, float x){
-	return ((1/mean)*exp(-x/mean));
+float f(float mean, float t){
+	return ((1/mean)*exp(-t/mean));
 };
 >>>>>>> b4476d29d0a789807d0c895fbe4edb918e93198c
 
@@ -164,27 +164,18 @@ void depart(void)  // change to call by regerence
 	}
 }
 
-float expon(float mean){ /* Exponential variate generation function. */   // using trapzoid intergration method
-	/* Return an exponential random variate with mean "mean". */
-<<<<<<< HEAD
-	float result=0.0;
-	for (int i=0; i<=sim_time;i++){
-		result+= (1/mean)*exp(-t/mean); //請幫我確認積分，應該需要更改
-	}
-	
-	return result; //這個1是說MEAN=1，這要改成我打的INPUT
-}
+
 =======
-	float lower_bound=0.0,upper_bound, width, x,sum=0.0,integral; // not sure aboud upper_bound value 
+	float expon(lower_bound=0.0,upper_bound, width, t,sum=0.0,integral); // not sure aboud upper_bound value 
 	int n; // number of sub intervals;
-	h=(b-a)/n;
-	int i
+	width=(upper_bound-lower_bound)/n;
+	int i;
 	for (i=0;,i<n;i++){
-		x=a+i*h;
+		t=lower_bound+i*width;
 	}
 	
-	sum=sum+f(mean , x);
-	integral=h/2.0*(f(a)+2*sum+f(b))
+	sum=sum+f(mean , t);
+	integral=h/2.0*(f(lower_bound)+2*sum+f(upper_bound));
 	
 	
 	return integral; //這個1是說MEAN=1，這要改成我打的INPUT
