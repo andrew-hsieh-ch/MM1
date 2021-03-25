@@ -9,14 +9,9 @@
 #define BUSY 1
 #define Q_limit 10000
 
-<<<<<<< HEAD
-float expon(float);
-void depart(void);
-=======
 float f(float mean, float t){
 	return ((1/mean)*exp(-t/mean));
 };
->>>>>>> b4476d29d0a789807d0c895fbe4edb918e93198c
 
 int main()
 {
@@ -164,8 +159,6 @@ void depart(void)  // change to call by regerence
 	}
 }
 
-
-=======
 	float expon(lower_bound=0.0,upper_bound, width, t,sum=0.0,integral); // not sure aboud upper_bound value 
 	int n; // number of sub intervals;
 	width=(upper_bound-lower_bound)/n;
@@ -180,4 +173,3 @@ void depart(void)  // change to call by regerence
 	
 	return integral; //這個1是說MEAN=1，這要改成我打的INPUT
 }
->>>>>>> b4476d29d0a789807d0c895fbe4edb918e93198c
