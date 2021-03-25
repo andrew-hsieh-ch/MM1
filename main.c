@@ -10,11 +10,12 @@
 #define Q_limit 10000
 
 float expon(float);
+void depart(void);
 
 int main()
 {
     int server_status=IDLE;     // initialize
-    int num_in_queueueue=0;
+    int num_in_queue=0;
     int num_custs_delayed=0;
     int num_delays_required=10000;
     float sim_time=0.0;
@@ -30,7 +31,7 @@ int main()
 
 	float mean_interarrival_time = 0.0; //initialize input
     	float mean_service_time = 0.0;
-//nothing
+
 	printf("Enter mean_interarrival_time\n");
 	scanf("%f", &mean_interarrival_time);
 	printf("Enter mean_service_time\n");
@@ -57,12 +58,12 @@ int main()
     while(num_custs_delayed<num_delays_required){
 
         if(next_arr_time<next_dept_time){
-            //printf("I'm in arrival");
+            
             arrive(&server_status,&num_in_queue,&num_custs_delayed,&Q_limit,&sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
 		&time_arrival[Q_limit],&mean_interarrival_time,&mean_service_time,&next_arr_time,float *next_dept_time);
         }
         else{
-            //printf("I'm in departure");
+            
             depart();
         }   
         
@@ -122,7 +123,7 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 }
 
 void depart(void)  // change to call by regerence
-//Departure event function.
+
 {	
     sim_time = next_dept_time;
 
@@ -161,7 +162,7 @@ float expon(float mean){ /* Exponential variate generation function. */
 	/* Return an exponential random variate with mean "mean". */
 	float result=0.0;
 	for (int i=0; i<=sim_time;i++){
-		result+= (1/mean)*exp(-t/mean); //請幫我確認積分，因該需要更改
+		result+= (1/mean)*exp(-t/mean); //請幫我確認積分，應該需要更改
 	}
 	
 	return result; //這個1是說MEAN=1，這要改成我打的INPUT
