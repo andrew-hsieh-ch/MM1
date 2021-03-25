@@ -3,14 +3,20 @@
 #include <stdlib.h>
 #include <time.h>
 #include "initialize.h"
-#include "lcgrand.h"
+#include "lcgrand.h"  // we don't need this anymore
 
 #define IDLE 0
 #define BUSY 1
 #define Q_limit 10000
 
+<<<<<<< HEAD
 float expon(float);
 void depart(void);
+=======
+float f(float mean, float x){
+	return ((1/mean)*exp(-x/mean));
+};
+>>>>>>> b4476d29d0a789807d0c895fbe4edb918e93198c
 
 int main()
 {
@@ -158,8 +164,9 @@ void depart(void)  // change to call by regerence
 	}
 }
 
-float expon(float mean){ /* Exponential variate generation function. */
+float expon(float mean){ /* Exponential variate generation function. */   // using trapzoid intergration method
 	/* Return an exponential random variate with mean "mean". */
+<<<<<<< HEAD
 	float result=0.0;
 	for (int i=0; i<=sim_time;i++){
 		result+= (1/mean)*exp(-t/mean); //請幫我確認積分，應該需要更改
@@ -167,3 +174,19 @@ float expon(float mean){ /* Exponential variate generation function. */
 	
 	return result; //這個1是說MEAN=1，這要改成我打的INPUT
 }
+=======
+	float lower_bound=0.0,upper_bound, width, x,sum=0.0,integral; // not sure aboud upper_bound value 
+	int n; // number of sub intervals;
+	h=(b-a)/n;
+	int i
+	for (i=0;,i<n;i++){
+		x=a+i*h;
+	}
+	
+	sum=sum+f(mean , x);
+	integral=h/2.0*(f(a)+2*sum+f(b))
+	
+	
+	return integral; //這個1是說MEAN=1，這要改成我打的INPUT
+}
+>>>>>>> b4476d29d0a789807d0c895fbe4edb918e93198c
