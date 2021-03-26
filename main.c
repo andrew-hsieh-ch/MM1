@@ -9,6 +9,12 @@
 #define BUSY 1
 #define Q_limit 10000
 
+void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
+	float* sim_time, float* area_under_Q, float* last_event_time, float* time_since_last_event,
+	float* time_arrival[Q_limit], float* mean_interarrival_time, float* mean_service_time,
+	float* next_arr_time, float *next_dept_time);
+
+
 float f(float mean, float t){
 	return ((1/mean)*exp(-t/mean));
 };
@@ -60,8 +66,8 @@ int main()
 
         if(next_arr_time<next_dept_time){
             
-            arrive(&server_status,&num_in_queue,&num_custs_delayed,&Q_limit,&sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
-		&time_arrival[Q_limit],&mean_interarrival_time,&mean_service_time,&next_arr_time,float *next_dept_time);
+            arrive(&server_status,&num_in_queue,&num_custs_delayed,&sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
+		&time_arrival[Q_limit],&mean_interarrival_time,&mean_service_time,&next_arr_time,&next_dept_time);
         }
         else{
             
@@ -87,7 +93,7 @@ int main()
     
 }
 
-void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,int* Q_limit,
+void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,
 float* sim_time,float* area_under_Q,float* last_event_time,float* time_since_last_event,
 float* time_arrival[Q_limit],float* mean_interarrival_time,float* mean_service_time,
 float* next_arr_time,float *next_dept_time) // change to call by reference
