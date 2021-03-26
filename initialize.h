@@ -26,3 +26,6 @@ float mean_service_time = 0;
 float Q_delay = 0;
 float total_q_delay = 0;
 float q_delay = 0;
+
+
+// whats up
