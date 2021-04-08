@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "initialize.h"
-#include "lcgrand.h"  // we don't need this anymore
+#include "lcgrand.h"  
 
 #define IDLE 0
 #define BUSY 1
