@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "initialize.h"
-#include "lcgrand.h"  
+#include "lcgrand.h"
 
 #define IDLE 0
 #define BUSY 1
@@ -15,7 +15,7 @@ void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
 	float* next_arr_time, float *next_dept_time);
 
 
-float expon(float Mean);
+float expon(float mean);
 
 
 int main()
@@ -48,7 +48,8 @@ int main()
 	printf("Enter mean_service_time\n");
 	scanf("%f", &mean_service_time);
 
-  float next_arr_time=expon(mean_interarrival_time,x);
+    next_arr_time=expon(mean_interarrival_time);
+
 
     for (int i=0;i<Q_limit;i++){ // initialize time_arrival
         time_arrival[i]=0.0;
@@ -161,12 +162,7 @@ void depart(void)  // change to call by regerence
 	}
 }
 
-float expon(float Mean){
+float expon(float mean){
+    return -mean*log(lcgrand(1));
 
-   float integral=0.0 , float x=1.0;
-
-   integral=1-exp(-x/Mean);
-
-
-	return integral;
 }
