@@ -14,6 +14,9 @@ void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
 	float* time_arrival[Q_limit], float* mean_interarrival_time, float* mean_service_time,
 	float* next_arr_time, float *next_dept_time);
 
+void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float* sim_time, float* area_under_Q,
+	float* last_event_time, float* time_since_last_event, float* time_arrival[Q_limit],
+	float* mean_service_time, float* next_dept_time, float* q_delay, float* total_q_delay);
 
 float expon(float mean);
 
@@ -68,7 +71,9 @@ int main()
         }
         else{
 
-            depart();
+			depart(&server_status, &num_in_queue, &num_custs_delayed, &sim_time, &area_under_Q,
+				&last_event_time, &time_since_last_event, &time_arrival[Q_limit],
+				&mean_service_time, &next_dept_time, &q_delay, &total_q_delay);
         }
 
     }
@@ -126,39 +131,41 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 	}
 }
 
-void depart(void)  // change to call by regerence
+void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float* sim_time, float* area_under_Q,
+	float* last_event_time, float* time_since_last_event, float* time_arrival[Q_limit],
+	float* mean_service_time, float* next_dept_time, float* q_delay, float* total_q_delay)  // change to call by regerence
 
 {
-    sim_time = next_dept_time;
+	*sim_time = *next_dept_time;
 
-	time_since_last_event = sim_time - last_event_time;
-	last_event_time = sim_time;
-	area_under_Q += num_in_queue * time_since_last_event;
+	*time_since_last_event = *sim_time - *last_event_time;
+	*last_event_time = *sim_time;
+	*area_under_Q += *num_in_queue * time_since_last_event;
 
 
 	//Check to wheather the queue is empty
 
-	if(num_in_queue == 0)
+	if (*num_in_queue == 0)
 	{
-		server_status = IDLE;
-		next_dept_time = pow(10,30);
+		*server_status = IDLE;
+		next_dept_time = pow(10, 30);
 	}
 
 	else
 	{
 		--num_in_queue;
-		Q_delay = sim_time-time_arrival[1];
+		*q_delay = *sim_time - *time_arrival[1];
 
-		total_q_delay += q_delay;
+		*total_q_delay += q_delay;
 
 		++num_custs_delayed;
 
-		next_dept_time = sim_time+expon(mean_service_time);
+		*next_dept_time = sim_time + expon(mean_service_time);
 
 		//Move each customer in queue (if any) up one place
-		for(int i=1;i<=num_in_queue;++i)
+		for (int i = 1; i <= *num_in_queue; ++i)
 
-		time_arrival[i] = time_arrival[i+1];
+			*time_arrival[i] = *time_arrival[i + 1];
 	}
 }
 
