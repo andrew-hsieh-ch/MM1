@@ -23,20 +23,20 @@ float expon(float mean);
 
 int main()
 {
-    int server_status=IDLE;     // initialize
-    int num_in_queue=0;
-    int num_custs_delayed=0;
-    int num_delays_required=10000;
-    float sim_time=0.0;
-    float total_q_delay=0.0;
+    int server_status = IDLE;     // initialize
+    int num_in_queue = 0;
+    int num_custs_delayed = 0;
+    int num_delays_required = 10000;
+    float sim_time = 0.0;
+    float total_q_delay = 0.0;
     float q_delay = 0.0;
-    float avg_delay=0.0;
-    float avg_num_in_queue=0.0;
-    float area_under_Q=0.0;
-    float last_event_time=0.0;
-    float time_since_last_event=0.0;
+    float avg_delay = 0.0;
+    float avg_num_in_queue = 0.0;
+    float area_under_Q = 0.0;
+    float last_event_time = 0.0;
+    float time_since_last_event = 0.0;
     float time_arrival[Q_limit];
-    float next_dept_time=pow(10,30);
+    float next_dept_time = pow(10,30);
 
 	float mean_interarrival_time = 0.0; //initialize input
     float mean_service_time = 0.0;
@@ -84,9 +84,14 @@ int main()
     printf("num_in_queue= %d \n",num_in_queue);
     printf("num_custs_delayed= %d \n",num_custs_delayed);
     printf("num_delays_required= %d \n",num_delays_required);
-    printf("total_delay= %.4f \n",total_delay);
+    printf("total_delay= %.4f \n",total_q_delay);
+
+    avg_delay = total_q_delay/num_custs_delayed;
     printf("avg_delay= %.4f \n",avg_delay);
+
+    avg_num_in_queue = area_under_Q/sim_time;
     printf("avg_num_in_queue= %.4f \n",avg_num_in_queue);
+
     printf("area_under_Q= %.4f \n",area_under_Q);
     printf("last_event_time= %.4f \n",last_event_time);
     printf("time_since_last_event= %.4f \n",time_since_last_event);
@@ -112,7 +117,7 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 
 	if(*server_status == BUSY)
 	{
-		++ *num_in_queue;
+        (*num_in_queue)++;
 		if(*num_in_queue > Q_limit)
 		{
 			printf("\nOverflow of the array time_arrival at");
@@ -124,7 +129,7 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 	else
 	{
 
-		++*num_custs_delayed;
+		(*num_custs_delayed)++;
 		*server_status = BUSY;
 
 		*next_dept_time = *sim_time + expon(*mean_service_time);
@@ -153,12 +158,12 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 
 	else
 	{
-		--num_in_queue;
+		(*num_in_queue)-- ;
 		*q_delay = *sim_time - time_arrival[1];
 
 		*total_q_delay += *q_delay;
 
-		++num_custs_delayed;
+		(*num_custs_delayed)++;
 
 		*next_dept_time = *sim_time + expon(*mean_service_time);
 
