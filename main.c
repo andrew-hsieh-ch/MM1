@@ -140,15 +140,15 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
-	*area_under_Q += *num_in_queue * time_since_last_event;
+	*area_under_Q += *num_in_queue * *time_since_last_event;
 
 
-	//Check to wheather the queue is empty
+	//Check to whether the queue is empty
 
 	if (*num_in_queue == 0)
 	{
 		*server_status = IDLE;
-		next_dept_time = pow(10, 30);
+		*next_dept_time = pow(10, 30);
 	}
 
 	else
@@ -156,11 +156,11 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 		--num_in_queue;
 		*q_delay = *sim_time - *time_arrival[1];
 
-		*total_q_delay += q_delay;
+		*total_q_delay += *q_delay;
 
 		++num_custs_delayed;
 
-		*next_dept_time = sim_time + expon(mean_service_time);
+		*next_dept_time = *sim_time + expon(*mean_service_time);
 
 		//Move each customer in queue (if any) up one place
 		for (int i = 1; i <= *num_in_queue; ++i)
