@@ -3,3 +3,13 @@
 	<stdio.h>
 	<math.h>
 
+1618417481 source:d:\user\desktop\mm1-main\mm1\main.c
+	<stdio.h>
+	<math.h>
+	<stdlib.h>
+	<time.h>
+	<float.h>
+	"lcgrand.h"
+
+1618053688 d:\user\desktop\mm1-main\mm1\lcgrand.h
+

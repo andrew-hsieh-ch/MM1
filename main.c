@@ -2,7 +2,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
-#include "initialize.h"
+#include <float.h>
 #include "lcgrand.h"
 
 #define IDLE 0
@@ -35,8 +35,9 @@ int main()
     float area_under_Q = 0.0;
     float last_event_time = 0.0;
     float time_since_last_event = 0.0;
-    float time_arrival[Q_limit];
-    float next_dept_time = pow(10,30);
+    float time_arrival[Q_limit]={0};
+    float next_dept_time = FLT_MAX;
+    float next_arr_time = 0.0;
 
 	float mean_interarrival_time = 0.0; //initialize input
     float mean_service_time = 0.0;
@@ -45,18 +46,13 @@ int main()
 
 	printf("Enter mean_interarrival_time\n");
 	scanf("%f", &mean_interarrival_time);
-
+    next_arr_time=expon(mean_interarrival_time);
 
 
 	printf("Enter mean_service_time\n");
 	scanf("%f", &mean_service_time);
 
-    next_arr_time=expon(mean_interarrival_time);
 
-
-    for (int i=0;i<Q_limit;i++){ // initialize time_arrival
-        time_arrival[i]=0.0;
-    }
 
 
 
@@ -67,19 +63,19 @@ int main()
         if(next_arr_time<next_dept_time){
 
             arrive(&server_status,&num_in_queue,&num_custs_delayed,&sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
-		&time_arrival[Q_limit],&mean_interarrival_time,&mean_service_time,&next_arr_time,&next_dept_time);
+		time_arrival,&mean_interarrival_time,&mean_service_time,&next_arr_time,&next_dept_time);
         }
         else{
 
 			depart(&server_status, &num_in_queue, &num_custs_delayed, &sim_time, &area_under_Q,
-				&last_event_time, &time_since_last_event, &time_arrival[Q_limit],
+				&last_event_time, &time_since_last_event, time_arrival,
 				&mean_service_time, &next_dept_time, &q_delay, &total_q_delay);
         }
 
     }
     printf("\n");
     printf("!!!");//report;
-    printf("sim_time= %d \n",sim_time);         // testing initialized value
+    printf("sim_time= %f \n",sim_time);         // testing initialized value
     printf("server_status= %d \n",server_status);
     printf("num_in_queue= %d \n",num_in_queue);
     printf("num_custs_delayed= %d \n",num_custs_delayed);
@@ -153,7 +149,7 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 	if (*num_in_queue == 0)
 	{
 		*server_status = IDLE;
-		*next_dept_time = pow(10, 30);
+		*next_dept_time = FLT_MAX;
 	}
 
 	else
