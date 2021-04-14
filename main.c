@@ -11,11 +11,11 @@
 
 void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
 	float* sim_time, float* area_under_Q, float* last_event_time, float* time_since_last_event,
-	float* time_arrival[Q_limit], float* mean_interarrival_time, float* mean_service_time,
+	float* time_arrival, float* mean_interarrival_time, float* mean_service_time,
 	float* next_arr_time, float *next_dept_time);
 
 void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float* sim_time, float* area_under_Q,
-	float* last_event_time, float* time_since_last_event, float* time_arrival[Q_limit],
+	float* last_event_time, float* time_since_last_event, float* time_arrival,
 	float* mean_service_time, float* next_dept_time, float* q_delay, float* total_q_delay);
 
 float expon(float mean);
@@ -97,7 +97,7 @@ int main()
 
 void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,
 float* sim_time,float* area_under_Q,float* last_event_time,float* time_since_last_event,
-float* time_arrival[Q_limit],float* mean_interarrival_time,float* mean_service_time,
+float* time_arrival,float* mean_interarrival_time,float* mean_service_time,
 float* next_arr_time,float *next_dept_time) // change to call by reference
 
 {
@@ -119,7 +119,7 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 			printf(" time %f",*sim_time);
 			exit(2); // double check
 		}
-		*time_arrival[*num_in_queue] = *sim_time;
+		time_arrival[*num_in_queue] = *sim_time;
 	}
 	else
 	{
@@ -132,7 +132,7 @@ float* next_arr_time,float *next_dept_time) // change to call by reference
 }
 
 void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float* sim_time, float* area_under_Q,
-	float* last_event_time, float* time_since_last_event, float* time_arrival[Q_limit],
+	float* last_event_time, float* time_since_last_event, float* time_arrival,
 	float* mean_service_time, float* next_dept_time, float* q_delay, float* total_q_delay)  // change to call by regerence
 
 {
@@ -154,7 +154,7 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 	else
 	{
 		--num_in_queue;
-		*q_delay = *sim_time - *time_arrival[1];
+		*q_delay = *sim_time - time_arrival[1];
 
 		*total_q_delay += *q_delay;
 
@@ -165,7 +165,7 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed, float
 		//Move each customer in queue (if any) up one place
 		for (int i = 1; i <= *num_in_queue; ++i)
 
-			*time_arrival[i] = *time_arrival[i + 1];
+			time_arrival[i] = time_arrival[i + 1];
 	}
 }
 
