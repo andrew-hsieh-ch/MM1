@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
-#include <time.h>
 #include "lcgrand.h"
 
 #define IDLE 0
@@ -11,11 +9,11 @@
 void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
 	 double* sim_time,  double* area_under_Q, float* last_event_time, float* time_since_last_event,
 	 double* time_arrival, float* mean_interarrival_time, float* mean_service_time,
-	float* next_arr_time, float *next_dept_time);
+	double* next_arr_time, double *next_dept_time);
 
 void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q,
 	float* last_event_time, float* time_since_last_event, double* time_arrival,
-	float* mean_service_time, float* next_dept_time,  double* q_delay,  double* total_q_delay);
+	float* mean_service_time, double* next_dept_time,  double* q_delay,  double* total_q_delay);
 
 float expon(float mean);
 
@@ -28,17 +26,17 @@ int main()
     int num_custs_delayed = 0;  // number of customers that has been served
     int num_delays_required = 0; // Maximum number of customers that is going to be served
 
-     double sim_time = 0.0;       // current simulation time
-     double total_q_delay = 0.0;
-     double q_delay = 0.0;        // the time difference between a customer's arrival time and his depature time
+    double sim_time = 0.0;       // current simulation time
+    double total_q_delay = 0.0;
+    double q_delay = 0.0;        // the time difference between a customer's arrival time and his depature time
     float avg_delay = 0.0;
     float avg_num_in_queue = 0.0;
-     double area_under_Q = 0.0;
+    double area_under_Q = 0.0;
     float last_event_time = 0.0;
     float time_since_last_event = 0.0;
-     double time_arrival[Q_limit]={0};   // array that stores each customer's arrival time
-    float next_dept_time = pow(10,30);
-    float next_arr_time = 0.0;
+    double time_arrival[Q_limit+1]={0};   // array that stores each customer's arrival time
+    double next_dept_time = pow(10,30);
+    double next_arr_time = 0.0;
 
 	float mean_interarrival_time = 0.0; //initialize inputs
     float mean_service_time = 0.0;      // end of initialization
@@ -74,18 +72,18 @@ int main()
 
 
     printf("\n");
-    printf("sim_time= %f \n",sim_time);        // report
+    printf("sim_time= %.8f \n",sim_time);        // report
 //    printf("server_status= %d \n",server_status);
     printf("num_in_queue= %d \n",num_in_queue);
     printf("num_custs_delayed= %d \n",num_custs_delayed);
     printf("num_delays_required= %d \n",num_delays_required);
-    printf("total_delay= %.4f \n",total_q_delay);
+    printf("total_delay= %.8f \n",total_q_delay);
 
     avg_delay = total_q_delay/num_custs_delayed;
-    printf("avg_delay= %.5f \n",avg_delay);
+    printf("avg_delay= %.8f \n",avg_delay);
 
     avg_num_in_queue = area_under_Q/sim_time;
-    printf("avg_num_in_queue= %.5f \n",avg_num_in_queue);
+    printf("avg_num_in_queue= %.8f \n",avg_num_in_queue);
 
 //printf("area_under_Q= %.4f \n",area_under_Q);
 //printf("last_event_time= %.4f \n",last_event_time);
@@ -98,7 +96,7 @@ int main()
 void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,    // Arrival event
  double* sim_time,  double* area_under_Q,float* last_event_time,float* time_since_last_event,
  double* time_arrival,float* mean_interarrival_time,float* mean_service_time,
-float* next_arr_time,float *next_dept_time) {
+double* next_arr_time,double *next_dept_time) {
 
 
 	*sim_time = *next_arr_time;
@@ -117,7 +115,7 @@ float* next_arr_time,float *next_dept_time) {
 		{
 			printf("\nOverflow of the array time_arrival at");
 			printf(" time %f",*sim_time);
-			exit(2); // double check
+			exit(2);
 		}
 
 		time_arrival[*num_in_queue] = *sim_time;  // store the new customer's arrival time
@@ -134,14 +132,14 @@ float* next_arr_time,float *next_dept_time) {
 
 void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q,
 	float* last_event_time, float* time_since_last_event,  double* time_arrival,
-	float* mean_service_time, float* next_dept_time,  double* q_delay,  double* total_q_delay) {
+	float* mean_service_time, double* next_dept_time,  double* q_delay,  double* total_q_delay) {
 
 
 	*sim_time = *next_dept_time;
 
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
-	*area_under_Q += (*num_in_queue) * (*time_since_last_event);
+	*area_under_Q = *area_under_Q + (*num_in_queue) * (*time_since_last_event);
 
 
 	//Check to whether the queue is empty
