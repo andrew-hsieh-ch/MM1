@@ -34,6 +34,7 @@ int main()
     double avg_system_delay = 0.0;
     float avg_delay = 0.0;
     float avg_num_in_queue = 0.0;
+	float avg_num_in_system = 0.0;
     double area_under_Q = 0.0;
     float last_event_time = 0.0;
     float time_since_last_event = 0.0;
@@ -76,20 +77,29 @@ int main()
 
     printf("\n");
     printf("sim_time= %.8f \n",sim_time);        // report
-//    printf("server_status= %d \n",server_status);
     printf("num_in_queue= %d \n",num_in_queue);
     printf("num_custs_delayed= %d \n",num_custs_delayed);
     printf("num_delays_required= %d \n",num_delays_required);
     printf("total_delay= %.8f \n",total_q_delay);
 
-    avg_delay = total_q_delay/num_custs_delayed;
+	//mean waiting time in the system
+
+    avg_delay = total_q_delay/num_custs_delayed;	// Wq
     printf("avg_q_delay= %.8f \n",avg_delay);
 
-    avg_system_delay = total_system_delay/num_custs_delayed;
+    avg_system_delay = total_system_delay/num_custs_delayed;//W
     printf("avg_system_delay= %.8f \n",avg_system_delay);
 
-    avg_num_in_queue = area_under_Q/sim_time;
-    printf("avg_num_in_queue= %.8f \n",avg_num_in_queue);
+
+	//mean number of customers in the system
+
+    avg_num_in_queue = area_under_Q/sim_time;		//Lq
+    printf("avg_num_in_queue = %.8f \n", avg_num_in_queue);
+
+	avg_num_in_system = num_custs_delayed/sim_time;	//L
+    printf("avg_num_in_system = %.8f \n", avg_num_in_system);
+
+	
 
 
 //printf("area_under_Q= %.4f \n",area_under_Q);
@@ -185,5 +195,4 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  doub
 
 float expon(float mean){
     return -mean*log(lcgrand(1));
-
 }
