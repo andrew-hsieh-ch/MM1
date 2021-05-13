@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include "lcgrand.h"
 
@@ -7,11 +8,11 @@
 #define Q_limit 100000
 
 void arrive(int* server_status, int* num_in_queue, int* num_custs_delayed,
-	 double* sim_time,  double* area_under_Q, float* last_event_time, float* time_since_last_event,
+	 double* sim_time,  double* area_under_Q, double* area_under_system, float* last_event_time, float* time_since_last_event,
 	 double* time_arrival, float* mean_interarrival_time, float* mean_service_time,
 	double* next_arr_time, double *next_dept_time);
 
-void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q,
+void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q, double* area_under_system,
 	float* last_event_time, float* time_since_last_event, double* time_arrival,
 	float* mean_service_time, double* next_dept_time,  double* q_delay,  double* total_q_delay, double *system_delay, double *total_system_delay);
 
@@ -36,6 +37,7 @@ int main()
     float avg_num_in_queue = 0.0;
 	float avg_num_in_system = 0.0;
     double area_under_Q = 0.0;
+	double area_under_system = 0.0;
     float last_event_time = 0.0;
     float time_since_last_event = 0.0;
     double time_arrival[Q_limit+1]={0};   // array that stores each customer's arrival time
@@ -64,11 +66,11 @@ int main()
 
         if(next_arr_time<next_dept_time){
 
-            arrive(&server_status,&num_in_queue,&num_custs_delayed,&sim_time,&area_under_Q,&last_event_time,&time_since_last_event,
+            arrive(&server_status,&num_in_queue,&num_custs_delayed,&sim_time,&area_under_Q, &area_under_system, &last_event_time,&time_since_last_event,
                     time_arrival,&mean_interarrival_time,&mean_service_time,&next_arr_time,&next_dept_time);
         }
         else{
-			depart(&server_status, &num_in_queue, &num_custs_delayed, &sim_time, &area_under_Q,
+			depart(&server_status, &num_in_queue, &num_custs_delayed, &sim_time, &area_under_Q, &area_under_system,
 				&last_event_time, &time_since_last_event, time_arrival, &mean_service_time, &next_dept_time, &q_delay, &total_q_delay, &system_delay, &total_system_delay);
         }
 
@@ -96,7 +98,7 @@ int main()
     avg_num_in_queue = area_under_Q/sim_time;		//Lq
     printf("avg_num_in_queue = %.8f \n", avg_num_in_queue);
 
-	avg_num_in_system = num_custs_delayed/sim_time;	//L
+	avg_num_in_system = area_under_system/sim_time;	//L
     printf("avg_num_in_system = %.8f \n", avg_num_in_system);
 
 	
@@ -111,7 +113,7 @@ int main()
 }
 
 void arrive(int* server_status,int* num_in_queue,int* num_custs_delayed,    // Arrival event
- double* sim_time,  double* area_under_Q,float* last_event_time,float* time_since_last_event,
+ double* sim_time,  double* area_under_Q, double* area_under_system, float* last_event_time,float* time_since_last_event,
  double* time_arrival,float* mean_interarrival_time,float* mean_service_time,
 double* next_arr_time,double *next_dept_time) {
 
@@ -122,6 +124,7 @@ double* next_arr_time,double *next_dept_time) {
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
 	*area_under_Q += (*num_in_queue) * (*time_since_last_event);
+	*area_under_system += (*num_in_queue + 1) * (*time_since_last_event);
 
 
 	if(*server_status == BUSY)
@@ -149,7 +152,7 @@ double* next_arr_time,double *next_dept_time) {
 	}
 }
 
-void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q,
+void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  double* sim_time,  double* area_under_Q, double* area_under_system,
 	float* last_event_time, float* time_since_last_event,  double* time_arrival,
 	float* mean_service_time, double* next_dept_time,  double* q_delay,  double* total_q_delay, double *system_delay, double *total_system_delay) {
 
@@ -158,7 +161,8 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  doub
 
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
-	*area_under_Q = *area_under_Q + (*num_in_queue) * (*time_since_last_event);
+	*area_under_Q += (*num_in_queue) * (*time_since_last_event);
+	*area_under_system += (*num_in_queue + 1) * (*time_since_last_event);
 
 
 	//Check to whether the queue is empty
