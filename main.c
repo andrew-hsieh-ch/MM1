@@ -124,7 +124,11 @@ double* next_arr_time,double *next_dept_time) {
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
 	*area_under_Q += (*num_in_queue) * (*time_since_last_event);
-	*area_under_system += (*num_in_queue + 0.5) * (*time_since_last_event);
+	if(*server_status == 0){
+		*area_under_system += (*num_in_queue) * (*time_since_last_event);
+	}else{
+		*area_under_system += (*num_in_queue + 1 ) * (*time_since_last_event);
+	}
 
 
 	if(*server_status == BUSY)
@@ -162,7 +166,12 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  doub
 	*time_since_last_event = *sim_time - *last_event_time;
 	*last_event_time = *sim_time;
 	*area_under_Q += (*num_in_queue) * (*time_since_last_event);
-	*area_under_system += (*num_in_queue + 0.5) * (*time_since_last_event);
+	if(*server_status == 0){
+		*area_under_system += (*num_in_queue) * (*time_since_last_event);
+	}else{
+		*area_under_system += (*num_in_queue + 1 ) * (*time_since_last_event);
+	}
+	
 
 
 	//Check to whether the queue is empty
@@ -190,7 +199,7 @@ void depart(int* server_status, int* num_in_queue, int* num_custs_delayed,  doub
 		*next_dept_time = *sim_time + expon(*mean_service_time);
 
 		//Move each customer in queue (if any) up one place
-		for (int i = 0; i <= *num_in_queue; ++i){
+		for (int i = 0; i <= *num_in_queue ; ++i){
 
 			time_arrival[i] = time_arrival[i + 1];
 		}
